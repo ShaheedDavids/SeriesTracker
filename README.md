@@ -1,6 +1,7 @@
 # SeriesTracker
 
 A cross-platform anime and series tracking app built with .NET MAUI Blazor Hybrid and MongoDB Atlas.
+**This project is still in development**
 
 ## Features
 
@@ -64,3 +65,8 @@ currentSeason, currentEpisode, watchStatus, dateAdded, lastUpdated
 - Passwords are never stored in plain text — BCrypt hashing is applied before saving to MongoDB
 - MongoDB indexes are created automatically on startup to enforce unique usernames and emails
 - Session state is held in memory and cleared on logout
+
+![Login Screen](Assets/login.png)
+
+
+![Dashboard](assets/dashboard.png)
