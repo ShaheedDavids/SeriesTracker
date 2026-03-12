@@ -1,0 +1,187 @@
+@page "/login"
+
+@using SeriesTracker.Services
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+
+<div class="auth-screen">
+    <div class="auth-bg">
+        <div class="auth-bg-grid"></div>
+        <div class="auth-bg-glow"></div>
+    </div>
+
+    <div class="auth-card">
+        <div class="auth-brand">
+            <span class="brand-icon">⬡</span>
+            <h1>Series<span class="brand-accent">Tracker</span></h1>
+            <p class="brand-sub">Your anime & series watchlist</p>
+        </div>
+
+        <div class="form-group">
+            <label>Username</label>
+            <input @bind="username" @bind:event="oninput"
+                   @onkeydown="HandleKeyDown"
+                   placeholder="Enter your username" />
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" @bind="password" @bind:event="oninput"
+                   @onkeydown="HandleKeyDown"
+                   placeholder="Enter your password" />
+        </div>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-error">@errorMessage</div>
+        }
+
+        <button class="btn btn-primary auth-submit"
+                @onclick="HandleLogin" disabled="@isLoading">
+            @(isLoading ? "Signing in..." : "Sign In")
+        </button>
+
+        <p class="auth-switch">
+            Don't have an account?
+            <button class="link-btn" @onclick="GoToRegister">Register</button>
+        </p>
+    </div>
+</div>
+
+@code {
+    private string username = "";
+    private string password = "";
+    private string errorMessage = "";
+    private bool isLoading = false;
+
+    protected override void OnInitialized()
+    {
+        if (AuthService.IsLoggedIn)
+            Navigation.NavigateTo("/dashboard");
+    }
+
+    private async Task HandleLogin()
+    {
+        errorMessage = "";
+        isLoading = true;
+        StateHasChanged();
+
+        var (success, message) = await AuthService.LoginAsync(username, password);
+
+        if (!success)
+            errorMessage = message;
+
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter") await HandleLogin();
+    }
+
+    private void GoToRegister()
+    {
+        Navigation.NavigateTo("/register");
+    }
+}
+
+<style>
+    .auth-screen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-bg {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+    }
+
+    .auth-bg-grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(233,69,96,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(233,69,96,0.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+    }
+
+    .auth-bg-glow {
+        position: absolute;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 600px;
+        height: 400px;
+        background: radial-gradient(ellipse, rgba(233,69,96,0.08) 0%, transparent 70%);
+        pointer-events: none;
+    }
+
+    .auth-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-subtle);
+        border-radius: 12px;
+        box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px var(--border-accent);
+        padding: 44px 40px;
+        width: 100%;
+        max-width: 420px;
+        position: relative;
+        z-index: 1;
+        animation: slideUp 0.3s ease;
+    }
+
+    .auth-brand {
+        text-align: center;
+        margin-bottom: 36px;
+    }
+
+    .brand-icon {
+        font-size: 32px;
+        color: var(--accent-primary);
+        display: block;
+        margin-bottom: 8px;
+        filter: drop-shadow(0 0 12px var(--accent-primary));
+    }
+
+    .auth-brand h1 {
+        font-size: 32px;
+        letter-spacing: 0.1em;
+    }
+
+    .brand-accent { color: var(--accent-primary); }
+
+    .brand-sub {
+        color: var(--text-muted);
+        font-size: 13px;
+        margin-top: 4px;
+        letter-spacing: 0.05em;
+    }
+
+    .auth-submit {
+        width: 100%;
+        padding: 13px;
+        margin-top: 8px;
+        font-size: 16px;
+    }
+
+    .auth-switch {
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 13px;
+        margin-top: 20px;
+    }
+
+    .auth-switch a {
+        color: var(--accent-primary);
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .auth-switch a:hover { text-decoration: underline; }
+</style>

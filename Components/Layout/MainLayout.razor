@@ -1,0 +1,38 @@
+﻿@using SeriesTracker.Services
+@inherits LayoutComponentBase
+@inject AuthService AuthService
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div class="app-shell">
+    @Body
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        AuthService.OnAuthStateChanged += HandleAuthChanged;
+    }
+
+    private void HandleAuthChanged()
+    {
+        if (!AuthService.IsLoggedIn)
+            Navigation.NavigateTo("/login");
+        else
+            Navigation.NavigateTo("/dashboard");
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        AuthService.OnAuthStateChanged -= HandleAuthChanged;
+    }
+}
+
+<style>
+    .app-shell {
+        min-height: 100vh;
+        background: var(--bg-primary);
+    }
+</style>
