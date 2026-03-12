@@ -69,4 +69,4 @@ currentSeason, currentEpisode, watchStatus, dateAdded, lastUpdated
 ![Login Screen](Assets/login.png)
 
 
-![Dashboard](assets/dashboard.png)
+![Dashboard](Assets/dashboard.png)
