@@ -17,6 +17,16 @@ namespace SeriesTracker
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 });
 
+
+            var localConfigPath = Path.Combine(AppContext.BaseDirectory, "appsettings.Local.json");
+            if (File.Exists(localConfigPath))
+            {
+                var localConfig = new ConfigurationBuilder()
+                    .AddJsonFile(localConfigPath, optional: true)
+                    .Build();
+                builder.Configuration.AddConfiguration(localConfig);
+            }
+
             // Load appsettings.json from embedded resources
             /*var assembly = Assembly.GetExecutingAssembly();
             using var stream = assembly.GetManifestResourceStream("SeriesTracker.appsettings.json");
@@ -30,9 +40,9 @@ namespace SeriesTracker
                 builder.Configuration.AddConfiguration(config);
             }*/
             // Replace with this:
-            var inMemoryConfig = new Dictionary<string, string?>
+            /*var inMemoryConfig = new Dictionary<string, string?>
             {
-                ["MongoDB:ConnectionString"] = "mongodb+srv://admin:admin123@cluster0.kigp57t.mongodb.net/",
+                ["MongoDB:ConnectionString"] = "mongodb+srv://admin:admin1234@cluster0.kigp57t.mongodb.net/",
                 ["MongoDB:DatabaseName"] = "SeriesTracker"
             };
 
@@ -40,7 +50,7 @@ namespace SeriesTracker
                 .AddInMemoryCollection(inMemoryConfig)
                 .Build();
 
-            builder.Configuration.AddConfiguration(config);
+            builder.Configuration.AddConfiguration(config);*/
 
             // Register services as singletons so state is shared across all pages
             builder.Services.AddSingleton<MongoDbService>();

@@ -69,4 +69,19 @@ currentSeason, currentEpisode, watchStatus, dateAdded, lastUpdated
 ![Login Screen](Assets/login.png)
 
 
-![Dashboard](assets/dashboard.png)
+![Dashboard](Assets/dashboard.png)
+
+## Configuration
+
+This project requires a MongoDB Atlas connection string which is not committed to the repo.
+
+1. Create a file called `appsettings.Local.json` in the project root
+2. Add your credentials:
+```json
+{
+  "MongoDB": {
+    "ConnectionString": "your-connection-string-here",
+    "DatabaseName": "SeriesTracker"
+  }
+}
+```
