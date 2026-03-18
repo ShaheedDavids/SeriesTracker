@@ -36,16 +36,22 @@ A cross-platform anime and series tracking app built with .NET MAUI Blazor Hybri
 
 1. Clone the repository
 2. Create a free MongoDB Atlas cluster and set up a database named `SeriesTracker` with two collections: `Users` and `WatchList`
-3. In `MauiProgram.cs` update the connection string with your Atlas credentials:
-```csharp
-["MongoDB:ConnectionString"] = "mongodb+srv://<user>:<password>@<cluster>.mongodb.net/"
+3. Create a file called `appsettings.Local.json` in the project root
+4. Add your credentials:
+```json
+{
+  "MongoDB": {
+    "ConnectionString": "your-connection-string-here",
+    "DatabaseName": "SeriesTracker"
+  }
+}
 ```
-4. Open the solution in Visual Studio and install NuGet packages:
+5. Open the solution in Visual Studio and install NuGet packages:
 ```
 MongoDB.Driver
 BCrypt.Net-Next
 ```
-5. Build and run targeting Windows
+6. Build and run targeting Windows
 
 ## Database Schema
 
@@ -71,17 +77,3 @@ currentSeason, currentEpisode, watchStatus, dateAdded, lastUpdated
 
 ![Dashboard](Assets/dashboard.png)
 
-## Configuration
-
-This project requires a MongoDB Atlas connection string which is not committed to the repo.
-
-1. Create a file called `appsettings.Local.json` in the project root
-2. Add your credentials:
-```json
-{
-  "MongoDB": {
-    "ConnectionString": "your-connection-string-here",
-    "DatabaseName": "SeriesTracker"
-  }
-}
-```
